@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from '../../common/Logo/Logo';
 import SearchBar from '../../common/SearchBar/SearchBar';
 import NotificationSettings from '../../common/NotificationSettings/NotificationSettings';
 
 const Header: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const handleSearch = (query: string) => {
     console.log('Search query:', query);
   };
@@ -32,23 +30,6 @@ const Header: React.FC = () => {
             <NotificationSettings />
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <div className="mb-4">
-                <SearchBar
-                  onSearch={handleSearch}
-                  placeholder="Enter token contract address..."
-                />
-              </div>
-              <div className="flex flex-col space-y-2">
-                <NotificationSettings />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </header>
   );
