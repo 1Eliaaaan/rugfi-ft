@@ -60,9 +60,8 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         // Aquí puedes emitir un evento personalizado o usar un callback
       });
 
-      socketInstance.on('rugDetected', (analysis) => {
-        console.log('RUG DETECTED!', analysis);
-        showToast({ type: 'warning', message: 'Potential rug pull detected!' });
+      socketInstance.on('creatorAnalysis', (analysis) => {
+        console.log('creatorAnalysis!', analysis);
       });
 
       setSocket(socketInstance);
