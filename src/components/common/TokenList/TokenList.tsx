@@ -188,11 +188,11 @@ const TokenList: React.FC = () => {
                   {/* RISKY */}
                   <td className="px-4 py-3 text-center">
                     <span className={`inline-block px-2 py-1 text-xs rounded ${getRiskBadgeClass(token.risky || 'pending')}`}>
-                      {token.risky === 'safe'
-                        ? 'Safe'
-                        : token.risky === 'rug'
-                          ? `Potential rug${token.rugged_tokens_count && token.rugged_tokens_count > 1 ? ` (${token.rugged_tokens_count})` : ''}`
-                          : 'Pending'}
+                      {token.analysis && Array.isArray(token.analysis.rugged_tokens)
+                        ? (token.analysis.rugged_tokens.length === 0
+                            ? 'Safe'
+                            : `Potential rug${token.analysis.rugged_tokens.length > 1 ? ` (${token.analysis.rugged_tokens.length})` : ''}`)
+                        : 'Pending'}
                     </span>
                   </td>
         
