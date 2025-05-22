@@ -117,11 +117,6 @@ const TokenList: React.FC = () => {
     return date.toLocaleString();
   };
 
-  const formatBondingPercent = (percent?: number) => {
-    if (percent === undefined) return '-';
-    return `${percent.toFixed(2)}%`;
-  };
-
   const getBondingBadgeClass = (percent?: number) => {
     if (percent === undefined) return 'bg-gray-800 text-gray-400';
     if (percent >= 10) return 'bg-green-900 text-green-400';
