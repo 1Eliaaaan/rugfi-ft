@@ -101,10 +101,6 @@ const TokenList: React.FC = () => {
     };
   }, [isConnected, isWebSocketConnected, socket, showToast, creatorAnalyses, playNotificationSound, settings]);
 
-  const calculateRiskStatus = (analysis: CreatorAnalysis): string => {
-    if (!analysis) return 'pending';
-    return analysis.isRug ? 'rug' : 'safe';
-  };
 
   const getRiskBadgeClass = (risky: string) => {
     if (risky === 'Safe') return 'bg-green-900 text-green-400';
