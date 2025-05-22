@@ -2,6 +2,7 @@ import React from 'react';
 import Logo from '../../common/Logo/Logo';
 import SearchBar from '../../common/SearchBar/SearchBar';
 import NotificationSettings from '../../common/NotificationSettings/NotificationSettings';
+import WalletConnect from '../../common/WalletConnect/WalletConnect';
 
 const Header: React.FC = () => {
   const handleSearch = (query: string) => {
@@ -25,8 +26,9 @@ const Header: React.FC = () => {
               />
             </div>
           </div>
-          {/* Notificaciones a la derecha */}
-          <div className="flex-shrink-0 flex items-center justify-end w-1/4">
+          {/* Notificaciones y Wallet a la derecha */}
+          <div className="flex-shrink-0 flex items-center w-1/4 space-x-4">
+            <WalletConnect />
             <NotificationSettings />
           </div>
         </div>
