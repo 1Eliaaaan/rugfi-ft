@@ -11,8 +11,9 @@ interface Token {
   create_time: number;
   token_name: string;
   token_symbol: string;
-  analysis?: CreatorAnalysis;
+  analysis?: any;
   risky?: string;
+  rugged_tokens_count?: number;
   bonding_percent?: number;
   sniped?: boolean;
 }
@@ -65,14 +66,15 @@ const TokenList: React.FC = () => {
 
       setTokens(prevTokens => {
         return prevTokens.map(token => {
-          // Buscar si el token está en rugged_tokens
-          const isRugged = Array.isArray(analysis.rugged_tokens) && analysis.rugged_tokens.some((rugged: any) => rugged.token_address === token.token_contract_address);
-          // Solo actualizar si el token fue creado por este creator
-          if (analysis.created_tokens && analysis.created_tokens[token.token_contract_address]) {
+          if (token.creator_address === analysis.creator_address) {
+            // ¿Está este token en rugged_tokens?
+            const isRugged = Array.isArray(analysis.rugged_tokens) && analysis.rugged_tokens.some((rugged: any) => rugged.token_address === token.token_contract_address);
+            const ruggedCount = Array.isArray(analysis.rugged_tokens) ? analysis.rugged_tokens.length : 0;
             return {
               ...token,
               analysis,
-              risky: isRugged ? 'rug' : 'safe'
+              risky: isRugged ? 'rug' : 'safe',
+              rugged_tokens_count: ruggedCount
             };
           }
           return token;
@@ -186,20 +188,24 @@ const TokenList: React.FC = () => {
                   {/* RISKY */}
                   <td className="px-4 py-3 text-center">
                     <span className={`inline-block px-2 py-1 text-xs rounded ${getRiskBadgeClass(token.risky || 'pending')}`}>
-                      {token.risky === 'safe' ? 'Safe' : token.risky === 'rug' ? 'Potential rug' : 'Pending'}
+                      {token.risky === 'safe'
+                        ? 'Safe'
+                        : token.risky === 'rug'
+                          ? `Potential rug${token.rugged_tokens_count && token.rugged_tokens_count > 1 ? ` (${token.rugged_tokens_count})` : ''}`
+                          : 'Pending'}
                     </span>
                   </td>
         
                   {/* BONDING */}
                   <td className="px-4 py-3 text-center">
-                    <span className={`inline-block px-2 py-1 text-xs rounded ${getBondingBadgeClass(token.risky === 'safe' ? 100 : token.risky === 'rug' ? 50 : undefined)}`}>
-                      {token.risky === 'safe' ? '100%' : token.risky === 'rug' ? '50%' : '-'}
+                    <span className={`inline-block px-2 py-1 text-xs rounded ${getBondingBadgeClass(token.bonding_percent)}`}>
+                      {token.bonding_percent !== undefined ? `${token.bonding_percent.toFixed(2)}%` : '-'}
                     </span>
                   </td>
                   {/* SNIPED */}
                   <td className="px-4 py-3 text-center">
-                    <span className={`inline-block px-2 py-1 text-xs rounded ${getSnipedBadgeClass(token.risky === 'rug')}`}>
-                      {token.risky === 'rug' ? 'Yes' : 'No'}
+                    <span className={`inline-block px-2 py-1 text-xs rounded ${getSnipedBadgeClass(token.sniped)}`}>
+                      {token.sniped ? 'Yes' : 'No'}
                     </span>
                   </td>
                             {/* ACTIONS */}
