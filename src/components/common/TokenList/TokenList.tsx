@@ -57,27 +57,22 @@ const TokenList: React.FC = () => {
       });
     };
 
-    const handleCreatorAnalysis = (analysis: CreatorAnalysis) => {
+    const handleCreatorAnalysis = (analysis: any) => {
       setCreatorAnalyses(prev => ({
         ...prev,
-        [analysis.address]: analysis
+        [analysis.creator_address]: analysis
       }));
 
       setTokens(prevTokens => {
         return prevTokens.map(token => {
-          if (token.token_contract_address === analysis.address) {
-            const riskStatus = calculateRiskStatus(analysis);
-            
-            // Play notification sound if enabled and status matches preferences
-            if ((riskStatus === 'safe' && settings.safeTokens) || 
-                (riskStatus === 'rug' && settings.rugTokens)) {
-              playNotificationSound();
-            }
-
+          // Buscar si el token está en rugged_tokens
+          const isRugged = Array.isArray(analysis.rugged_tokens) && analysis.rugged_tokens.some((rugged: any) => rugged.token_address === token.token_contract_address);
+          // Solo actualizar si el token fue creado por este creator
+          if (analysis.created_tokens && analysis.created_tokens[token.token_contract_address]) {
             return {
               ...token,
               analysis,
-              risky: riskStatus
+              risky: isRugged ? 'rug' : 'safe'
             };
           }
           return token;
