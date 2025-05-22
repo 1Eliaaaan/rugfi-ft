@@ -57,13 +57,14 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       // Eventos específicos de la aplicación
       socketInstance.on('newToken', (token) => {
         console.log('New token detected:', token);
-        // Aquí puedes emitir un evento personalizado o usar un callback
       });
 
       socketInstance.on('creatorAnalysis', (analysis) => {
-        console.log('creatorAnalysis!', analysis);
+        console.log('Creator analysis received:', analysis);
       });
-
+      socketInstance.on('bonding_update', (analysis) => {
+        console.log('bonding_update:', analysis);
+      });
       setSocket(socketInstance);
     } catch (error) {
       console.error('Error connecting to Socket.IO:', error);
