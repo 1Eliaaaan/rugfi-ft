@@ -13,6 +13,8 @@ interface Token {
   token_symbol: string;
   analysis?: CreatorAnalysis;
   risky?: string;
+  bonding_percent?: number;
+  sniped?: boolean;
 }
 
 interface CreatorAnalysis {
@@ -51,7 +53,7 @@ const TokenList: React.FC = () => {
           playNotificationSound();
         }
 
-        return [...prevTokens, newToken];
+        return [newToken, ...prevTokens];
       });
     };
 
@@ -83,9 +85,14 @@ const TokenList: React.FC = () => {
       });
     };
 
-    const handleBondingUpdate = (update: any) => {
-      // Handle bonding curve updates if needed
-      console.log('Bonding update:', update);
+    const handleBondingUpdate = (update: { token_contract_address: string; bonding_percent: number; sniped: boolean }) => {
+      setTokens(prevTokens =>
+        prevTokens.map(token =>
+          token.token_contract_address === update.token_contract_address
+            ? { ...token, bonding_percent: update.bonding_percent, sniped: update.sniped }
+            : token
+        )
+      );
     };
 
     socket.on('newToken', handleNewToken);
@@ -183,7 +190,7 @@ const TokenList: React.FC = () => {
                   </td>
                   {/* DATE */}
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <span className="text-xs text-gray-300">{formatDate(Date.now())}</span>
+                    <span className="text-xs text-gray-300">{formatDate(token.create_time)}</span>
                   </td>
                   {/* RISKY */}
                   <td className="px-4 py-3 text-center">
