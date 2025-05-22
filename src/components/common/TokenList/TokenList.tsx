@@ -174,7 +174,7 @@ const TokenList: React.FC = () => {
                   {/* CREATOR */}
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex flex-col">
-                      <span className="text-white font-semibold">{formatAddress(token.creator_address)}</span>
+                      <span className="text-white font-semibold">{formatAddress(token.creator_twitter_handle || token.creator_address)}</span>
                     </div>
                   </td>
                   {/* CONTRACT */}
