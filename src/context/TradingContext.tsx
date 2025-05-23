@@ -151,7 +151,6 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
 
     try {
-      const signer = getSigner();
       const provider = getProvider();
       const privateKey = localStorage.getItem('wallet_private_key');
       if (!privateKey) throw new Error('No wallet connected');
@@ -164,7 +163,7 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const calculatorContract = new ethers.Contract(CALCULATOR_ADDRESS, ABI_CALCULATE, provider);
       const avaxAmountWei = ethers.utils.parseUnits(avaxAmount.toString(), 18);
       
-      const [tokenAmount, price] = await calculatorContract.calculatePurchaseAmountAndPrice(avaxAmountWei, tokenId);
+      const [tokenAmount] = await calculatorContract.calculatePurchaseAmountAndPrice(avaxAmountWei, tokenId);
       console.log("Tokens calculados:", tokenAmount.toString());
 
       // Calcular slippage y redondear como en el ejemplo

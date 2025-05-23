@@ -10,7 +10,6 @@ interface TradeDrawerProps {
   balance?: string;
 }
 
-const quickAvax = [1, 2, 5];
 const quickSell = [25, 50, 100];
 const PRESETS_KEY = 'rugfi_quick_buy_presets';
 
