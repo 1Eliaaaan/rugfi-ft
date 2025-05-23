@@ -20,12 +20,6 @@ interface Token {
   photo_url?: string;
 }
 
-interface CreatorAnalysis {
-  address: string;
-  isRug: boolean;
-  riskLevel: number;
-  // ... otros campos de análisis
-}
 
 const ARENA_API_URL = 'https://api.arena.trade/groups_plus?is_official=eq.false&limit=30&offset=0&order=create_time.desc.nullslast&select=token_contract_address%2Ccreator_address%2Ccreate_time%2Ctoken_name%2Ctoken_symbol%2Ccreator_twitter_handle%2Ccreator_twitter_followers%2Ctoken_name%2Cphoto_url';
 
@@ -104,7 +98,7 @@ const TokenList: React.FC = () => {
         return prevTokens.map(token => {
           if (token.creator_address === analysis.creator_address) {
             // ¿Está este token en rugged_tokens?
-            const isRugged = Array.isArray(analysis.rugged_tokens) && analysis.rugged_tokens.some((rugged: any) => rugged.token_address === token.token_contract_address);
+            // const isRugged = Array.isArray(analysis.rugged_tokens) && analysis.rugged_tokens.some((rugged: any) => rugged.token_address === token.token_contract_address);
             const ruggedCount = Array.isArray(analysis.rugged_tokens) ? analysis.rugged_tokens.length : 0;
             return {
               ...token,
