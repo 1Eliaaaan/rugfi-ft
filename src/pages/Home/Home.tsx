@@ -4,7 +4,7 @@ import TokenList from '../../components/common/TokenList/TokenList';
 
 const Home: React.FC = () => {
   return (
-    <div className=" bg-black flex flex-col h-screen">
+    <div className=" bg-black flex flex-col h-1/6">
       <Header />
       <div className=" py-8 flex-1">
         <TokenList />
