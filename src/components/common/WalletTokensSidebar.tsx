@@ -47,7 +47,7 @@ const WalletTokensSidebar: React.FC = () => {
   );
 
   return (
-    <div className="bg-black border border-gray-800 rounded-lg p-4 shadow-md w-full max-w-xs mx-auto mb-6 max-h-[600px] overflow-y-auto">
+    <div className="bg-black border border-gray-800 rounded-lg p-4 shadow-md w-full max-w-sm mx-auto mb-6 max-h-[600px] overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-white">Your Wallet Tokens</h2>
         <button

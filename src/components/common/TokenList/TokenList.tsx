@@ -3,6 +3,8 @@ import { useToast } from '../../../context/ToastContext';
 import { useWallet } from '../../../context/WalletContext';
 import { useSoundNotification } from '../../../context/SoundNotificationContext';
 import WalletTokensSidebar from '../../common/WalletTokensSidebar';
+import TradeDrawer from '../TradeDrawer';
+import { useTrading } from '../../../context/TradingContext';
 
 interface Token {
   token_contract_address: string;
@@ -30,6 +32,10 @@ const TokenList: React.FC = () => {
   const { isConnected, isWebSocketConnected, socket } = useWallet();
   const { playNotificationSound, settings } = useSoundNotification();
   const [initialLoading, setInitialLoading] = useState(true);
+  const [selectedToken, setSelectedToken] = useState<any>(null);
+  const [tradeType, setTradeType] = useState<'buy' | 'sell' | null>(null);
+  const [tokenBalance, setTokenBalance] = useState<string>('0');
+  const { buyToken, sellToken, getTokenBalance } = useTrading();
 
   // Fetch tokens iniciales si hay private key
   useEffect(() => {
@@ -133,6 +139,38 @@ const TokenList: React.FC = () => {
     };
   }, [isConnected, isWebSocketConnected, socket, showToast, creatorAnalyses, playNotificationSound, settings]);
 
+  // Add this new useEffect to fetch token balance when selected token changes
+  useEffect(() => {
+    const fetchTokenBalance = async () => {
+      if (selectedToken && isConnected) {
+        try {
+          const balance = await getTokenBalance(selectedToken.token_contract_address);
+          setTokenBalance(balance);
+        } catch (error) {
+          console.error('Error fetching token balance:', error);
+          setTokenBalance('0');
+        }
+      }
+    };
+
+    fetchTokenBalance();
+  }, [selectedToken, isConnected, getTokenBalance]);
+
+  const handleBuy = async (avaxAmount: number) => {
+    if (!selectedToken) return;
+    await buyToken(selectedToken.token_contract_address, avaxAmount);
+    // No cerrar el drawer automáticamente
+    // setSelectedToken(null);
+    // setTradeType(null);
+  };
+
+  const handleSell = async (percentage: number) => {
+    if (!selectedToken) return;
+    await sellToken(selectedToken.token_contract_address, percentage);
+    // No cerrar el drawer automáticamente
+    // setSelectedToken(null);
+    // setTradeType(null);
+  };
 
   const getRiskBadgeClass = (risky:  string) => {
     if(risky === 'pending') return 'bg-yellow-900 text-yellow-400';
@@ -278,15 +316,28 @@ const TokenList: React.FC = () => {
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                           </button>
-                          <a
-                            href={`https://arenabook.xyz/token/${token.token_contract_address}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 hover:underline"
-                            title="View on Snowtrace"
+                          <button
+                            onClick={() => {
+                              setSelectedToken(token);
+                              setTradeType('buy');
+                            }}
+                            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors"
+                            disabled={!isConnected}
+                            title={!isConnected ? "Connect wallet to trade" : "Buy token"}
                           >
-                            Explorer
-                          </a>
+                            Buy
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedToken(token);
+                              setTradeType('sell');
+                            }}
+                            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors"
+                            disabled={!isConnected}
+                            title={!isConnected ? "Connect wallet to trade" : "Sell token"}
+                          >
+                            Sell
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -297,6 +348,18 @@ const TokenList: React.FC = () => {
           </div>
         </div>
       </div>
+      <TradeDrawer
+        open={!!selectedToken && !!tradeType}
+        onClose={() => {
+          setSelectedToken(null);
+          setTradeType(null);
+        }}
+        token={selectedToken}
+        type={tradeType || 'buy'}
+        onBuy={handleBuy}
+        onSell={handleSell}
+        balance={tokenBalance}
+      />
     </div>
   );
 };
