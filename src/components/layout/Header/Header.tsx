@@ -3,6 +3,7 @@ import Logo from '../../common/Logo/Logo';
 import SearchBar from '../../common/SearchBar/SearchBar';
 import NotificationSettings from '../../common/NotificationSettings/NotificationSettings';
 import WalletConnect from '../../common/WalletConnect/WalletConnect';
+import Footer from '../Footer';
 
 const Header: React.FC = () => {
   const handleSearch = (query: string) => {
@@ -37,4 +38,6 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header; 
+export default Header;
+
+<Footer /> 

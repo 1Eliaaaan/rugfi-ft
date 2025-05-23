@@ -4,11 +4,11 @@ import TokenList from '../../components/common/TokenList/TokenList';
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <div className=" bg-black flex flex-col h-screen">
       <Header />
-      <main className="container mx-auto py-8">
+      <div className=" py-8 flex-1">
         <TokenList />
-      </main>
+      </div>
     </div>
   );
 };
